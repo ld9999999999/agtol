@@ -1,0 +1,14 @@
+bin/
+*.test
+*.out
+coverage.*
+
+# editor
+.vscode/
+.idea/
+
+# local testing
+/tmp-sockets/
+*.log
+policy.local.toml
+log/

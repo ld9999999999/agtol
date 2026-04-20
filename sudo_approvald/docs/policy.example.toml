@@ -1,0 +1,50 @@
+# Example approvald policy. Place at /etc/approvald/policy.toml with
+# mode 0600 owned by root.
+#
+# Rules are evaluated top to bottom; first match wins.
+# Decision values: "allow", "ask", "deny".
+#
+# Requester format:  "{container}:{uid}"
+#   container = "host" when not in a recognized runtime
+#   otherwise         "podman:<cid>", "docker:<cid>", "lxc:<name>", etc.
+#
+# Args matching: per-position. "*" = one element (any). "**" = zero+ rest,
+# must be last.
+
+[settings]
+env_allowlist             = ["LANG", "LC_ALL", "TERM", "NO_COLOR"]
+pending_limit             = 16
+pending_timeout_sec       = 300
+default_exec_timeout_sec  = 300
+
+# Allow claude workspaces to list nft rules without prompting.
+[[rule]]
+id        = 1
+requester = "*"
+command   = "/usr/sbin/nft"
+args      = ["list", "**"]
+decision  = "allow"
+
+# Allow claude workspaces to restart nginx.
+[[rule]]
+id        = 2
+requester = "podman:claude-web-*:1000"
+command   = "/usr/bin/systemctl"
+args      = ["restart", "nginx"]
+decision  = "allow"
+
+# Host user running apt-get update: ask first.
+[[rule]]
+id        = 3
+requester = "host:1000"
+command   = "/usr/bin/apt-get"
+args      = ["update"]
+decision  = "ask"
+
+# Catch-all: everything else goes to the approver.
+[[rule]]
+id        = 99
+requester = "*"
+command   = "*"
+args      = ["**"]
+decision  = "ask"

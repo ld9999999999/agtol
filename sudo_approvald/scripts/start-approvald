@@ -1,0 +1,9 @@
+#!/bin/sh
+
+D=$(dirname $0)/..
+sudo "$D/bin/approvald" \
+    --approver-uid 1000 \
+    --client-group sudoapproval \
+    --policy "$D/etc/approvald.toml" \
+    --socket-dir "$D/etc/approvald" \
+    --log "$D/log/approvald.log" "$@"

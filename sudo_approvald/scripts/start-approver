@@ -1,0 +1,4 @@
+#!/bin/sh
+
+D=$(dirname $0)/..
+"$D/bin/approve" -allow-remember-flagged -socket etc/approvald/approver.sock

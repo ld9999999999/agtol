@@ -1,0 +1,15 @@
+# example configuration for approvald
+
+[settings]
+env_allowlist             = ["LANG", "LC_ALL", "TERM", "NO_COLOR"]
+pending_limit             = 16
+pending_timeout_sec       = 300
+default_exec_timeout_sec  = 300
+
+# catch-all: ask for everything
+[[rule]]
+id = 99
+requester = "*"
+command = "*"
+args = ["**"]
+decision = "ask"

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+D=$(dirname $0)/..
+export APPROVALD_SOCKET=$D/etc/approvald/client.sock
+$D/bin/claude-sudo "$@"
